@@ -65,15 +65,7 @@ export class GMaps {
                   if (results[1]) {
                     this.gmap.setZoom(12);
                     this.gmap.setCenter(latlng);
-                    
                     this.map.addBeehive(new Location(parseFloat(latlngStr[0]), parseFloat(latlngStr[1])));
-                    
-                    //var marker = new google.maps.Marker({
-                    //  position: latlng,
-                    //  map: this.gmap
-                    //});
-                    //this.infowindow.setContent(results[1].formatted_address);
-                    //this.infowindow.open(this.gmap, marker);
                   } else {
                     window.alert('No results found');
                   }
