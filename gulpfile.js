@@ -27,9 +27,9 @@ var config = {
     }
   },
   'output': {
-    'html': 'dist/',
-    'styles': 'dist/styles/',
-    'scripts': 'dist/scripts/'
+    'html': 'docs/',
+    'styles': 'docs/styles/',
+    'scripts': 'docs/scripts/'
   },
   'externalLibs': require('./package.json')['browserify-shim']
 }
