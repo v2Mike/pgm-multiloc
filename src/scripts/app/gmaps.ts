@@ -8,12 +8,14 @@ import {IBeehiveOptions, Beehive} from './beehive.ts';
 export class GMaps {
     private map: Map;
     private gmap: google.maps.Map;
+    private geocoder: google.maps.Geocoder;
+    private infowindow: google.maps.InfoWindow;
 
     constructor() {
         this.map = new Map();
         loadGoogleMapsApi({
             key: config.googleMapsKey,
-            libraries: ['places', 'geometry']
+            libraries: ['places', 'geometry', 'geocoder']
         }).then((googleMaps) => {
             this.initMap();
         });
@@ -48,6 +50,38 @@ export class GMaps {
                 this.gmap.setZoom(config.zoom);
             }
         });
+        
+        document.getElementById('submit').addEventListener('click', () => {
+            this.geocoder = new google.maps.Geocoder;
+            this.infowindow = new google.maps.InfoWindow;
+            
+            let geo_input = document.getElementById('latlng') as HTMLInputElement;
+            var latlngStr = geo_input.value.split(',', 2);
+            var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+            
+            this.geocoder.geocode({'location': latlng}, (results, status) => {
+                var status_string: string = String(status);
+                if (status_string === 'OK') {
+                  if (results[1]) {
+                    this.gmap.setZoom(12);
+                    this.gmap.setCenter(latlng);
+                    
+                    this.map.addBeehive(new Location(parseFloat(latlngStr[0]), parseFloat(latlngStr[1])));
+                    
+                    //var marker = new google.maps.Marker({
+                    //  position: latlng,
+                    //  map: this.gmap
+                    //});
+                    //this.infowindow.setContent(results[1].formatted_address);
+                    //this.infowindow.open(this.gmap, marker);
+                  } else {
+                    window.alert('No results found');
+                  }
+                } else {
+                  window.alert('Geocoder failed due to: ' + status);
+                }
+            });
+        });
 
         this.gmap.addListener('click', (event: google.maps.MouseEvent) => {
             this.map.addBeehive(new Location(event.latLng.lat(), event.latLng.lng()));
@@ -56,5 +90,6 @@ export class GMaps {
         google.maps.event.addListenerOnce(this.gmap, 'idle', () => {
             this.map.initMap(<IMapOptions>{ gmap: this.gmap });
         });
+
     }
 }
