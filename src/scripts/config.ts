@@ -3,12 +3,12 @@ export class config {
   public static latitude: number = 33.684685;
   public static longitude: number = -117.867418;
   public static zoom: number = 12;
-  public static leaps: number = 4;
+  public static leaps: number = 2;
   public static steps: number = 6;
   public static maxSteps: number = 100;
 
   public static os: string = 'linux';
-  public static workers: number = 4;
+  public static workers: number = 8;
   public static accountColumns: string = 'username, password';
 
   public static windowsTemplates: ICommandTemplate = {
