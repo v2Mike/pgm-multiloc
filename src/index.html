@@ -81,12 +81,12 @@
                 </fieldset>
 
                 <fieldset class="fieldset small-12 columns">
-                    <p class="helptext">Valid parameters: <span data-bind="if: os() === 'windows'">{pogomap-directory},</span> {index}, {location}, {steps}, {auth}</p>
+                    <p class="helptext">Valid parameters: <span data-bind="if: os() === 'windows'">{rocketmap-directory},</span> {index}, {location}, {steps}, {auth}</p>
                     <legend>Command Templates:</legend>
 
                     <div data-bind="visible: os() === 'windows'">
-                        <label>PogoMap Directory:
-                            <input id="pogomap-directory" type="text" name="pogomapDirectory" data-bind="textInput: pogomapDirectory" required />
+                        <label>RocketMap Directory:
+                            <input id="rocketmap-directory" type="text" name="rocketmapDirectory" data-bind="textInput: rocketmapDirectory" required />
                         </label>
                     </div>
 

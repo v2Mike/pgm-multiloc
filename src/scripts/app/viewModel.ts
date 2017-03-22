@@ -16,7 +16,7 @@ export class ViewModel {
     public accountsPerHive: KnockoutObservable<number>;
     public accountColumns: KnockoutObservable<string>;
     public accounts: KnockoutObservable<string>;
-    public pogomapDirectory: KnockoutObservable<string>;
+    public rocketmapDirectory: KnockoutObservable<string>;
     public filename: KnockoutObservable<string>;
 
     private windowsTemplates: Templates;
@@ -31,17 +31,17 @@ export class ViewModel {
     constructor(options: IViewModelOptions) {
         this.options = options;
         this.activeHives = ko.computed(() => this.getActiveHives());
-        this.pogomapDirectory = ko.observable('');
+        this.rocketmapDirectory = ko.observable('');
 
         this.os = ko.observable(config.os);
         this.os.subscribe((newValue) => {
             this.invalidFields([]);
 
             if (this.os() === 'windows') {
-                $('#pogomap-directory').removeAttr('data-abide-ignore');
+                $('#rocketmap-directory').removeAttr('data-abide-ignore');
             }
             else {
-                $('#pogomap-directory').attr('data-abide-ignore', '');
+                $('#rocketmap-directory').attr('data-abide-ignore', '');
             }
 
             _.forEach($('input,select,textarea', '#generate-ui'), (e) => $('#generate-ui').foundation('validateInput', $(e)));
@@ -104,7 +104,7 @@ export class ViewModel {
         let preAccount = `
 ${templates.setup.value()}
 ${this.replaceVariables(templates.server.value(), { 
-    'pogomap-directory': this.pogomapDirectory(),
+    'rocketmap-directory': this.rocketmapDirectory(),
     location: hives[0].getCenter().toString() 
 })}
 ${templates.delay.value()}
@@ -129,7 +129,7 @@ ${templates.delay.value()}
             }
             workers += `
 ${this.replaceVariables(templates.worker.value(), { 
-    'pogomap-directory': this.pogomapDirectory(),
+    'rocketmap-directory': this.rocketmapDirectory(),
     index: i + 1,
     location: hives[i].getCenter().toString(), 
     steps: hives[i].steps,
