@@ -29,7 +29,7 @@ export class GMaps {
         this.gmap = new google.maps.Map(document.getElementById('map'), {
             zoom: config.zoom,
             center: new google.maps.LatLng(config.latitude, config.longitude),
-            mapTypeId: google.maps.MapTypeId.HYBRID,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
             mapTypeControl: true
         });
 
