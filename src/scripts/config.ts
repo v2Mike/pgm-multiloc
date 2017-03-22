@@ -5,7 +5,7 @@ export class config {
   public static zoom: number = 12;
   public static leaps: number = 4;
   public static steps: number = 6;
-  public static maxSteps: number = 40;
+  public static maxSteps: number = 100;
 
   public static os: string = 'linux';
   public static workers: number = 4;

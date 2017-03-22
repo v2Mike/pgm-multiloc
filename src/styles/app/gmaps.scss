@@ -15,6 +15,7 @@
 
     p {
         // font-size: 1rem;
+        text-align: right;
     }
 }
 
@@ -66,4 +67,19 @@
 #script-preview {
     white-space: nowrap;
     overflow: auto;
+}
+#floating-panel {
+  position: absolute;
+  top: 100px;
+  left: 25px;
+  z-index: 5;
+  background-color: transparent;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  width: 550px;
+}
+#latlng {
+  width: 300px;
+  display: inline-block;
 }
