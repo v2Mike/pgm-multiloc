@@ -15,7 +15,7 @@ export class GMaps {
         this.map = new Map();
         loadGoogleMapsApi({
             key: config.googleMapsKey,
-            libraries: ['places', 'geometry', 'geocoder']
+            libraries: ['places', 'geometry']
         }).then((googleMaps) => {
             this.initMap();
         });
