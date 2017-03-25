@@ -7,7 +7,7 @@ export class config {
   public static steps: number = 6;
   public static maxSteps: number = 100;
 
-  public static os: string = 'linux';
+  public static os: string = 'windows';
   public static workers: number = 8;
   public static accountColumns: string = 'username, password';
 
