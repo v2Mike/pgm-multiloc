@@ -30,9 +30,17 @@
         border-color: #4d90fe;
     }
 
+    #geo-control {
+        float: left !important;    
+    }
+    
     #latlng {
-        width: 70%;
+        width: 80%;
         display: inline-block;
+    }
+    
+    #latlng:focus {
+        border-color: #4d90fe;
     }
     
     .pac-container {
