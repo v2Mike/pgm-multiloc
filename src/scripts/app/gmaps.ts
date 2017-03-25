@@ -44,7 +44,7 @@ export class GMaps {
             let place = autocomplete.getPlace();
             if (place.geometry) {
                 this.gmap.setCenter(place.geometry.location);
-                this.gmap.setZoom(config.zoom);
+                this.gmap.setZoom(14);
                 var inputElement = <HTMLInputElement>document.getElementById('latlng');
                 inputElement.value = String(place.geometry.location.lat()) + "," + String(place.geometry.location.lng());
             }
