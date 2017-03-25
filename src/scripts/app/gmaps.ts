@@ -74,10 +74,6 @@ export class GMaps {
             });
         });
 
-        this.gmap.addListener('click', (event: google.maps.MouseEvent) => {
-            this.map.addBeehive(new Location(event.latLng.lat(), event.latLng.lng()));
-        });
-
         google.maps.event.addListenerOnce(this.gmap, 'idle', () => {
             this.map.initMap(<IMapOptions>{ gmap: this.gmap });
         });
