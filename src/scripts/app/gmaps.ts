@@ -46,7 +46,7 @@ export class GMaps {
                 this.gmap.setCenter(place.geometry.location);
                 this.gmap.setZoom(config.zoom);
                 var inputElement = <HTMLInputElement>document.getElementById('latlng');
-                inputElement.value = String(place.geometry.location);
+                inputElement.value = String(place.geometry.location.lat()) + "," + String(place.geometry.location.lng());
             }
         });
         
