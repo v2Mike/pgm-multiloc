@@ -49,7 +49,7 @@ export class GMaps {
                 inputElement.value = String(place.geometry.location.lat()) + "," + String(place.geometry.location.lng());
             }
         });
-        
+
         document.getElementById('submit').addEventListener('click', () => {
             this.geocoder = new google.maps.Geocoder;
             this.infowindow = new google.maps.InfoWindow;
