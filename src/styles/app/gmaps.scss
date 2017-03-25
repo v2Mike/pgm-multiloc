@@ -35,8 +35,11 @@
     }
     
     #latlng {
-        width: 80%;
         display: inline-block;
+    }
+    
+    .button {
+        vertical-align: baseline;
     }
     
     #latlng:focus {
