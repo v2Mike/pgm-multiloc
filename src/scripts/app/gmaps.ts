@@ -67,7 +67,7 @@ export class GMaps {
                 var status_string: string = String(status);
                 if (status_string === 'OK') {
                   if (results[1]) {
-                    this.gmap.setZoom(13);
+                    this.gmap.setZoom(12);
                     this.gmap.setCenter(latlng);
                     this.map.addBeehive(new Location(parseFloat(latlngStr[0]), parseFloat(latlngStr[1])));
                   } else {
@@ -85,6 +85,7 @@ export class GMaps {
             if (label.classList.contains('legacy-mode')) {
                 this.gmap.addListener('click', (event: google.maps.MouseEvent) => {
                     this.map.addBeehive(new Location(event.latLng.lat(), event.latLng.lng()));
+                    this.gmap.setCenter({lat: event.latLng.lat(), lng: event.latLng.lng()});
                 });
             }else {
                 google.maps.event.clearListeners(this.gmap, 'click');
