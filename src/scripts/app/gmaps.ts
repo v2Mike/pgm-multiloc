@@ -9,7 +9,6 @@ export class GMaps {
     private map: Map;
     private gmap: google.maps.Map;
     private geocoder: google.maps.Geocoder;
-    private infowindow: google.maps.InfoWindow;
 
     constructor() {
         this.map = new Map();
@@ -52,17 +51,16 @@ export class GMaps {
 
         document.getElementById('submit').addEventListener('click', () => {
             this.geocoder = new google.maps.Geocoder;
-            this.infowindow = new google.maps.InfoWindow;
 
             let geo_input = document.getElementById('latlng') as HTMLInputElement;
             if(!geo_input.value){
                 window.alert('Please enter a valid location or coordinates to add a new hive.');
                 return;
             }
-            
+
             var latlngStr = geo_input.value.split(',', 2);
             var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
-            
+
             this.geocoder.geocode({'location': latlng}, (results, status) => {
                 var status_string: string = String(status);
                 if (status_string === 'OK') {
