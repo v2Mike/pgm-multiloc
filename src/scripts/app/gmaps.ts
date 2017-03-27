@@ -53,8 +53,13 @@ export class GMaps {
         document.getElementById('submit').addEventListener('click', () => {
             this.geocoder = new google.maps.Geocoder;
             this.infowindow = new google.maps.InfoWindow;
-            
+
             let geo_input = document.getElementById('latlng') as HTMLInputElement;
+            if(!geo_input.value){
+                window.alert('Please enter a valid location or coordinates to add a new hive.');
+                return;
+            }
+            
             var latlngStr = geo_input.value.split(',', 2);
             var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
             
@@ -66,7 +71,7 @@ export class GMaps {
                     this.gmap.setCenter(latlng);
                     this.map.addBeehive(new Location(parseFloat(latlngStr[0]), parseFloat(latlngStr[1])));
                   } else {
-                    window.alert('No results found');
+                    window.alert('No results found.');
                   }
                 } else {
                   window.alert('Geocoder failed due to: ' + status);
