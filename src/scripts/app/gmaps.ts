@@ -79,6 +79,18 @@ export class GMaps {
             });
         });
 
+        document.getElementById('legacy-checkbox').addEventListener('click', () => {
+            let label = document.getElementById('legacy-label') as HTMLElement;
+            label.classList.toggle('legacy-mode');
+            if (label.classList.contains('legacy-mode')) {
+                this.gmap.addListener('click', (event: google.maps.MouseEvent) => {
+                    this.map.addBeehive(new Location(event.latLng.lat(), event.latLng.lng()));
+                });
+            }else {
+                google.maps.event.clearListeners(this.gmap, 'click');
+            }
+        });
+
         google.maps.event.addListenerOnce(this.gmap, 'idle', () => {
             this.map.initMap(<IMapOptions>{ gmap: this.gmap });
         });

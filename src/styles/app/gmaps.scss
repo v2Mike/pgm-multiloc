@@ -32,7 +32,23 @@
     }
 
     #geo-control {
-        float: left !important;    
+        float: left !important;
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+    }
+    
+    #legacy-control {
+        float: left !important;
+        label {
+            background:rgba(255,255,255,0.5);
+            padding: 0 5px;
+        }
+        input {
+            margin: 0;
+        }
+        .legacy-mode {
+            background:rgba(0,255,0,0.5);
+        }
     }
     
     #latlng {
