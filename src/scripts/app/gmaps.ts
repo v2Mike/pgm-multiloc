@@ -32,8 +32,10 @@ export class GMaps {
         });
 
         let input = document.getElementById('pac-input') as HTMLInputElement;
-        this.gmap.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('custom-map-controls'));
+        (<HTMLInputElement>document.getElementById("latlng")).placeholder = "'" + config.latitude + "," + config.longitude + "'";
 
+        this.gmap.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('custom-map-controls'));
+        this.gmap.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('download-coordinates'));
         this.gmap.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('generate-trigger'));
 
         let autocomplete = new google.maps.places.Autocomplete(input);

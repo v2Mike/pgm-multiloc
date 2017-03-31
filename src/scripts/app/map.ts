@@ -53,6 +53,7 @@ export class Map {
     let beehive = new Beehive(<IBeehiveOptions>{ map: this, steps: this.steps, leaps: config.leaps, center: location });
     this.beehives.push(beehive);
     $('#generate-trigger').show();
+    $('#download-coordinates').show();
   }
 
   public addMapObject(mapObject: google.maps.MVCObject): void {
@@ -85,6 +86,7 @@ export class Map {
 
       if (this.beehives().length === 0) {
         $('#generate-trigger').hide();
+        $('#download-coordinates').hide();
       }
     }
   }

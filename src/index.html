@@ -12,7 +12,7 @@
 <div id="custom-map-controls">
     <div class="row">
         <div class="small-12 columns callout secondary">
-            <p>Search for a general location or input latitude,longitude to place a new hive marker. Drag and resize to adjust the scan location. Click on a location to activate it to change the step size, toggle the hives to be scanned, or remove it.</p>
+            <p>Search by general location or input precision latitude,longitude to place a new hive marker. Drag and resize to adjust the scan location. Click on a location to activate it to change the step size, toggle the hives to be scanned, or remove it.</p>
         </div>
     </div>
     <div class="row">
@@ -22,14 +22,14 @@
             </div>
 			<div id="geo-control" class="small-12 medium-8 columns">
 				<div class="small-7 medium-8 columns">
-					<input id="latlng" type="text" placeholder="33.684685,-117.867418" />
+					<input id="latlng" type="text" />
 				</div>
 				<div class="small-5 medium-4 columns">
 					<input id="submit" class="button success" type="button" value="Create New Hive" />
 				</div>
 			</div>
 			<div id="legacy-control" class="small-12 medium-8 columns">
-				<input type="checkbox" name="legacy-checkbox" value="disabled" id="legacy-checkbox" /><label id="legacy-label" for="legacy-checkbox">Legacy Mode (Point and Click)</label>
+				<input type="checkbox" name="legacy-checkbox" id="legacy-checkbox" /><label id="legacy-label" for="legacy-checkbox">Legacy Mode (Point and Click)</label>
 			</div>
         </div>
 
@@ -101,7 +101,7 @@
                     </label>
 
                     <label>Server Command:
-                        <input type="text"" name="server" data-bind="textInput: activeTemplates().server.value" required />
+                        <input type="text" name="server" data-bind="textInput: activeTemplates().server.value" required />
                     </label>
 
                     <label>Worker Command:
@@ -135,11 +135,14 @@
             </div>
             <div class="row text-center">
                 <!-- ko if: !isValid()--><p class="callout alert">Please fix all validation errors.</p><!-- /ko -->
-                <button id="coords" class="button warning" data-bind="click: coordsFile">Download Coordinates</button>
                 <button id="download" class="button success" data-bind="if: isValid, click: downloadFile">Download Script</button>
             </div>
         </form>
     </div>
+</div>
+
+<div id="download-coordinates">
+    <button id="coords" class="button info" data-bind="click: coordsFile">Download Coordinates (<span data-bind="text: activeHives().length"></span>)</button>
 </div>
 
 <div id="map"></div>

@@ -14,7 +14,7 @@
 
     p {
         text-align: right;
-        margin-left: 20%;
+        margin-left: 30%;
     }
 }
 
@@ -26,7 +26,7 @@
         font-weight: 300;
         text-overflow: ellipsis;
     }
-    
+
     #pac-input:focus {
         border-color: #4d90fe;
     }
@@ -36,7 +36,7 @@
         margin-left: 0 !important;
         padding-left: 0 !important;
     }
-    
+
     #legacy-control {
         float: left !important;
         label {
@@ -50,26 +50,26 @@
             background:rgba(0,255,0,0.5);
         }
     }
-    
+
     #latlng {
         display: inline-block;
     }
-    
+
     .button {
         vertical-align: baseline;
     }
-    
+
     #latlng:focus {
         border-color: #4d90fe;
     }
-    
+
     .pac-container {
         font-family: Roboto;
     }
 }
 #beehive-control {
     .slider {
-        background-color: #333; 
+        background-color: #333;
         margin-top: 0.75rem;
         margin-bottom: 0.75rem;
     }
@@ -82,15 +82,19 @@
     }
 }
 
-#github-buttons {
-    display: none;
-}
-
 #generate-trigger {
     display: none;
 }
+
 #download {
     display: none;
+}
+
+#download-coordinates {
+    display: none;
+    #coords {
+        margin-right: 0.75rem;
+    }
 }
 
 #script-preview {
