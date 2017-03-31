@@ -28,15 +28,18 @@ export class GMaps {
         this.gmap = new google.maps.Map(document.getElementById('map'), {
             zoom: config.zoom,
             center: new google.maps.LatLng(config.latitude, config.longitude),
-            mapTypeControl: true
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.TOP_RIGHT
+            }
         });
 
         let input = document.getElementById('pac-input') as HTMLInputElement;
         (<HTMLInputElement>document.getElementById("latlng")).placeholder = "'" + config.latitude + "," + config.longitude + "'";
 
-        this.gmap.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('custom-map-controls'));
-        this.gmap.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('download-coordinates'));
-        this.gmap.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('generate-trigger'));
+        this.gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('custom-map-controls'));
+        this.gmap.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('script-options'));
 
         let autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', this.gmap);

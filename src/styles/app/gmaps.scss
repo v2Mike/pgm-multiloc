@@ -11,10 +11,8 @@
 #custom-map-controls {
     width: 100%;
     display: none;
-
     p {
-        text-align: right;
-        margin-left: 30%;
+        //margin-right: 30%;
     }
 }
 
@@ -82,22 +80,18 @@
     }
 }
 
-#generate-trigger {
-    display: none;
-}
-
 #download {
     display: none;
-}
-
-#download-coordinates {
-    display: none;
-    #coords {
-        margin-right: 0.75rem;
-    }
 }
 
 #script-preview {
     white-space: nowrap;
     overflow: auto;
+}
+
+#script-options {
+    display: none;
+    #coords {
+        margin-right: 0.75rem;
+    }
 }

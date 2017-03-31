@@ -36,7 +36,6 @@ export class Map {
     sliderOptions.initialStart = config.steps;
 
     $('#custom-map-controls').show();
-    $('#github-buttons').show();
     Foundation.reInit(['slider']);
 
     $('#beehive-control .slider').on('moved.zf.slider', (e) => this.changeSteps(e));
@@ -52,8 +51,7 @@ export class Map {
   public addBeehive(location: Location): void {
     let beehive = new Beehive(<IBeehiveOptions>{ map: this, steps: this.steps, leaps: config.leaps, center: location });
     this.beehives.push(beehive);
-    $('#generate-trigger').show();
-    $('#download-coordinates').show();
+    $('#script-options').show();
   }
 
   public addMapObject(mapObject: google.maps.MVCObject): void {
@@ -85,8 +83,7 @@ export class Map {
       $('#remove').hide();
 
       if (this.beehives().length === 0) {
-        $('#generate-trigger').hide();
-        $('#download-coordinates').hide();
+        $('#script-options').hide();
       }
     }
   }
