@@ -33,32 +33,20 @@
         float: left !important;
         margin-left: 0 !important;
         padding-left: 0 !important;
-    }
-
-    #legacy-control {
-        float: left !important;
-        label {
-            background:rgba(255,255,255,0.5);
-            padding: 0 5px;
+        font-family: Roboto;
+        font-weight: 600;
+        #latlng {
+            display: inline-block;
+            font-size: 1.1em;
+            height: inherit;
         }
-        input {
-            margin: 0;
+        #latlng:focus {
+            border-color: #4d90fe;
         }
-        .legacy-mode {
-            background:rgba(0,255,0,0.5);
-        }
-    }
-
-    #latlng {
-        display: inline-block;
     }
 
     .button {
         vertical-align: baseline;
-    }
-
-    #latlng:focus {
-        border-color: #4d90fe;
     }
 
     .pac-container {
@@ -78,6 +66,21 @@
     #edit-hives, #remove {
         display: none;
     }
+    #legacy-control {
+        float: left !important;
+        label {
+            background:rgba(255,255,255,0.7);
+            padding: 0 5px 0 5px;
+            font-size: smaller;
+            font-weight: bold;
+        }
+        input {
+            margin: 1rem 0;
+        }
+        .legacy-mode {
+            background:rgba(0,255,0,0.5);
+        }
+    }
 }
 
 #download {
@@ -94,4 +97,7 @@
     #coords {
         margin-right: 0.75rem;
     }
+}
+.button {
+    font-size: 1.1em;
 }

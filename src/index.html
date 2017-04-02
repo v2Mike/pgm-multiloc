@@ -20,17 +20,14 @@
             <div class="small-12 medium-8 columns">
                 <input id="pac-input" class="controls" type="text" placeholder="Enter a location" />
             </div>
-			<div id="geo-control" class="small-12 medium-8 columns">
-				<div class="small-7 medium-8 columns">
-					<input id="latlng" type="text" />
-				</div>
-				<div class="small-5 medium-4 columns">
-					<input id="submit" class="button success" type="button" value="Create New Hive" />
-				</div>
-			</div>
-			<div id="legacy-control" class="small-12 medium-12 columns">
-				<input type="checkbox" name="legacy-checkbox" id="legacy-checkbox" /><label id="legacy-label" for="legacy-checkbox">Legacy Mode (Point and Click)</label>
-			</div>
+      			<div id="geo-control" class="small-12 medium-8 columns">
+      				<div class="small-8 medium-9 columns">
+      					<input id="latlng" type="text" />
+      				</div>
+      				<div class="small-4 medium-3 columns">
+      					<input id="submit" class="button success" type="button" value="ADD HIVE" />
+      				</div>
+      			</div>
         </div>
 
         <div id="beehive-control" class="small-12 medium-6 columns">
@@ -48,8 +45,12 @@
             </div>
 
             <div class="small-12 columns text-right">
-                <button id="edit-hives" class="button success" type="button">Edit Hives</button>
-                <button id="remove" class="button alert" type="button">Remove</button>
+                <button id="edit-hives" class="button success" type="button">EDIT</button>
+                <button id="remove" class="button alert" type="button">REMOVE</button>
+                <div id="legacy-control" class="text-left">
+                    <input type="checkbox" name="legacy-checkbox" id="legacy-checkbox" />
+                    <label id="legacy-label" for="legacy-checkbox">Legacy Mode (Point &amp; Click)</label>
+                </div>
             </div>
         </div>
     </div>
