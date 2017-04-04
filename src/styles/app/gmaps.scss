@@ -11,9 +11,6 @@
 #custom-map-controls {
     width: 100%;
     display: none;
-    p {
-        //margin-right: 30%;
-    }
 }
 
 #place-control {
@@ -24,11 +21,9 @@
         font-weight: 300;
         text-overflow: ellipsis;
     }
-
     #pac-input:focus {
         border-color: #4d90fe;
     }
-
     #geo-control {
         float: left !important;
         margin-left: 0 !important;
@@ -44,11 +39,11 @@
             border-color: #4d90fe;
         }
     }
-
     .pac-container {
         font-family: Roboto;
     }
 }
+
 #beehive-control {
     .slider {
         background-color: #333;
@@ -58,7 +53,6 @@
     .slider-fill {
         background-color: #333;
     }
-
     #edit-hives, #remove {
         display: none;
     }
@@ -95,11 +89,15 @@
         margin-right: 0.75rem;
     }
 }
+
 .button {
     font-size: 1.1em;
 }
+
 #hive-data {
-    margin: 0.3rem auto;
-    padding: 0.2rem;
+    margin: 0.2rem auto;
     background:rgba(255,255,255,0.7);
+    td {
+        padding: 0.3rem 0.6rem;
+    }
 }
