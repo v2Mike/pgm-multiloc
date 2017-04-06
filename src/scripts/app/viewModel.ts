@@ -14,13 +14,17 @@ export class ViewModel {
     public activeHives: KnockoutObservable<Hive[]>;
     public os: KnockoutObservable<string>;
     public accountsPerHive: KnockoutObservable<number>;
-    public accountColumns: KnockoutObservable<string>;
-    public accounts: KnockoutObservable<string>;
+    public accountDirectory: KnockoutObservable<string>;
     public rocketmapDirectory: KnockoutObservable<string>;
     public filename: KnockoutObservable<string>;
 
+    public serverCheckbox: KnockoutObservable<boolean>;
+    public alarmCheckbox: KnockoutObservable<boolean>;
+    public scriptDelay: KnockoutObservable<number>;
+
     private windowsTemplates: Templates;
     private linuxTemplates: Templates;
+    private screenTemplates: Templates;
 
     public activeTemplates: KnockoutObservable<Templates>;
     public generateScriptPreview: KnockoutComputed<string>;
@@ -31,7 +35,7 @@ export class ViewModel {
     constructor(options: IViewModelOptions) {
         this.options = options;
         this.activeHives = ko.computed(() => this.getActiveHives());
-        this.rocketmapDirectory = ko.observable('');
+        this.rocketmapDirectory = ko.observable(config.rocketmapDirectory);
 
         this.os = ko.observable(config.os);
         this.os.subscribe((newValue) => {
@@ -46,10 +50,13 @@ export class ViewModel {
 
             _.forEach($('input,select,textarea', '#generate-ui'), (e) => $('#generate-ui').foundation('validateInput', $(e)));
         });
-        this.accountsPerHive = ko.observable(config.workers);
-        this.accountColumns = ko.observable(config.accountColumns);
-        this.accountColumns.subscribe((newValue) => $('#generate-ui').foundation('validateInput', $('#accounts')));
-        this.accounts = ko.observable('');
+
+        this.serverCheckbox = ko.observable($('#serverCheckbox').is(':checked'));
+        this.alarmCheckbox = ko.observable($('#alarmCheckbox').is(':checked'));
+        this.scriptDelay = ko.observable(config.scriptDelay);
+
+        this.accountsPerHive = ko.observable(0);
+        this.accountDirectory = ko.observable(config.accountDirectory);
 
         this.windowsTemplates = new Templates(config.windowsTemplates);
         this.linuxTemplates = new Templates(config.linuxTemplates);
@@ -62,6 +69,9 @@ export class ViewModel {
         this.isValid.subscribe((newValue) => {
             newValue ? $('#download').show() : $('#download').hide();
         });
+        if (this.isValid) {
+            $('#download').show();
+        }
 
         $(document).on('valid.zf.abide invalid.zf.abide', ((e) => this.handleFormInputValidation(e)));
         $(document).on('formvalid.zf.abide forminvalid.zf.abide', ((e) => this.handleFormValidation(e)));
@@ -98,48 +108,35 @@ export class ViewModel {
     public generateScriptOutput(isPreview: boolean = true): string {
         let templates = this.activeTemplates();
         let hives = this.activeHives();
-        let accounts = this.accounts().split('\n');
         if (hives.length <= 0) { return ''; }
 
-        let preAccount = `
-${templates.setup.value()}
-${this.replaceVariables(templates.server.value(), { 
-    'rocketmap-directory': this.rocketmapDirectory(),
-    location: hives[0].getCenter().toString() 
-})}
-${templates.delay.value()}
-        `;
-        let workers = '';
-        let currentAccountIndex = 0;
-        let accountColumns = _.map(this.accountColumns().split(','), (x) => _.trim(x));
+        let setupScript = `${templates.setup.value()}
+`;
+        let serverScript = this.serverCheckbox() === false ? '' : `${this.replaceVariables(templates.server.value(), {
+            'rocketmap-directory': this.rocketmapDirectory(),
+            location: hives[0].getCenter().toString()
+        })}
+`;
+        let alarmScript = this.alarmCheckbox() === false ? '' : `${templates.alarm.value()}
+`;
 
+        let workerScript = '';
         for (let i = 0; i < (isPreview ? 1 : hives.length); i++) {
-            let accountValues = [];
-
-            for (let a = 0; a < this.accountsPerHive(); a++) {
-                let accountParams: any = {};
-                if (accounts.length > currentAccountIndex) {
-                    let accountParts = _.map(accounts[currentAccountIndex].split(','), (acc) => _.trim(acc));
-                    for (let j = 0; j < accountColumns.length; j++) {
-                        accountParams[accountColumns[j]] = accountParts[j];
-                    }
-                }
-                currentAccountIndex++;
-                accountValues.push(this.replaceVariables(templates.auth.value(), accountParams));
-            }
-            workers += `
-${this.replaceVariables(templates.worker.value(), { 
-    'rocketmap-directory': this.rocketmapDirectory(),
-    index: i + 1,
-    location: hives[i].getCenter().toString(), 
-    steps: hives[i].steps,
-    'auth-template': _.join(accountValues, ' ') 
+            workerScript += `${this.replaceVariables(templates.worker.value(), {
+                'rocketmap-directory': this.rocketmapDirectory(),
+                'account-directory': this.accountDirectory(),
+                index: i + 1,
+                location: hives[i].getCenter().toString(),
+                steps: hives[i].steps,
+                workers: this.accountsPerHive()
+            })}
+${this.replaceVariables(templates.delay.value(), {
+    'script-delay': this.scriptDelay()
 })}
-${templates.delay.value()}
-            `;
+`;
         }
 
-        return preAccount + workers;
+        return setupScript + serverScript + alarmScript + workerScript;
     }
 
     private replaceVariables(text: string, variables: any): string {
@@ -153,9 +150,12 @@ ${templates.delay.value()}
         this.downloadScript(script, this.activeTemplates().filename.value());
     }
 
+    public updateAPH (): void {
+        $('#workers').trigger('change');
+    }
+
     public coordsFile (): void {
         let script = _.join(_.map(this.activeHives(), (h) => h.getCenter().toString()), '\n');
-
         this.downloadScript(script, 'coords.txt');
     }
 
@@ -190,17 +190,17 @@ export class Template {
 
 export class Templates {
   public setup: Template;
+  public alarm: Template;
   public server: Template;
   public worker: Template;
-  public auth: Template;
   public delay: Template;
   public filename: Template;
 
   constructor(defaults: ICommandTemplate) {
       this.setup = new Template(defaults.setup);
+      this.alarm = new Template(defaults.alarm);
       this.server = new Template(defaults.server);
       this.worker = new Template(defaults.worker);
-      this.auth = new Template(defaults.auth);
       this.delay = new Template(defaults.delay);
       this.filename = new Template(defaults.filename);
   }

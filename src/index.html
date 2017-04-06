@@ -67,7 +67,7 @@
             </tr>
         </table>
         <div id="coords" class="button info" data-bind="click: coordsFile">Download Coordinates</div>
-        <div id="generate-trigger" class="button success" data-open="generate-ui-wrapper">Generate Launch Script</div>
+        <div id="generate-trigger" class="button success" data-bind="click: updateAPH" data-open="generate-ui-wrapper">Generate Launch Script</div>
     </div>
     <div id="generate-ui-wrapper" class="reveal large" data-reveal>
         <form id="generate-ui" data-abide novalidate>
@@ -75,63 +75,85 @@
             <input type="hidden" id="hives" data-bind="value: activeHives().length" />
             <div class="row">
                 <fieldset class="fieldset small-12 columns">
-                    <legend>Operating System:</legend>
+                    <legend>OS Template</legend>
                     <input type="radio" name="os" value="windows" id="os-windows" required data-bind="checked: os" /><label for="os-windows">Windows</label>
                     <input type="radio" name="os" value="linux" id="os-linux" data-bind="checked: os" /><label for="os-linux">Linux</label>
                 </fieldset>
 
                 <fieldset class="fieldset small-12 columns">
-                    <legend>Accounts:</legend>
-                    <label>Number Per Hive:
-                        <input id="workers" type="text" name="workers" data-bind="textInput: accountsPerHive" required pattern="number" />
-                    </label>
-
-                    <label>Columns:
-                        <p class="helptext">The columns listed here will be the variables used in the {auth-template}.</p>
-                        <input id="accountColumns" type="text" name="accountColumns" data-bind="textInput: accountColumns" required />
-                    </label>
-
-                    <label>Accounts:
-                        <p class="helptext">One line per account. Comma-separated. Columns must match those specified above. You need <span data-bind="text: activeHives().length * accountsPerHive()"></span> accounts.</p>
-                        <textarea id="accounts" name="accounts" data-bind="textInput: accounts" required data-validator="accountColumns enoughAccounts"></textarea>
-                    </label>
+                    <legend>Server Template</legend>
+                    <p class="helptext">Enable this option to customize and include a RocketMap server in your startup script.</p>
+                    <div id="server-control" class="text-left">
+                        <input type="checkbox" name="server-checkbox" id="server-checkbox" data-bind="checked: serverCheckbox" checked/>
+                        <label id="server-checkbox-label" for="server-checkbox">Include RocketMap Server Template</label>
+                    </div>
                 </fieldset>
 
                 <fieldset class="fieldset small-12 columns">
-                    <p class="helptext">Valid parameters: <span data-bind="if: os() === 'windows'">{rocketmap-directory},</span> {index}, {location}, {steps}, {auth}</p>
-                    <legend>Command Templates:</legend>
+                    <legend>Alarm Template</legend>
+                    <p class="helptext">Enable this option to customize and include a PokeAlarm server in your startup script.</p>
+                    <div id="alarm-control" class="text-left">
+                        <input type="checkbox" name="alarm-checkbox" id="alarm-checkbox" data-bind="checked: alarmCheckbox" />
+                        <label id="alarm-checkbox-label" for="alarm-checkbox">Include PokeAlarm Server Template</label>
+                    </div>
+                </fieldset>
+
+                <fieldset class="fieldset small-12 columns">
+                    <legend>Workers Template</legend>
+                    <label>Workers Per Hive:
+                        <p class="helptext">The number of workers per hive. (This should be less than the total accounts per csv.)</p>
+                        <input id="workers" type="text" name="workers" data-bind="textInput: accountsPerHive" required pattern="number" />
+                    </label>
+
+                    <label>Script Delay:
+                        <p class="helptext">The number of seconds to sleep between starting each hive to stagger logins.</p>
+                        <input id="scriptDelay" type="text" name="scriptDelay" data-bind="textInput: scriptDelay" required />
+                    </label>
+
+                    <label>Account CSV Directory:
+                        <p class="helptext">The relative file path where your account csv files are stored within your RocketMap directory.</p>
+                        <input id="accountDirectory" type="text" name="accountDirectory" data-bind="textInput: accountDirectory" required />
+                    </label>
 
                     <div data-bind="visible: os() === 'windows'">
                         <label>RocketMap Directory:
+                            <p class="helptext">The system path where RocketMap is installed.</p>
                             <input id="rocketmap-directory" type="text" name="rocketmapDirectory" data-bind="textInput: rocketmapDirectory" required />
                         </label>
                     </div>
+                </fieldset>
+
+                <fieldset class="fieldset small-12 columns">
+                    <p class="helptext">Valid parameters: <span data-bind="if: os() === 'windows'">{rocketmap-directory},</span> {account-directory}, {index}, {location}, {steps}, {workers}, {script-delay}</p>
+                    <legend>Generated Templates</legend>
 
                     <label>Setup Command:
                         <input type="text" name="setup" data-bind="textInput: activeTemplates().setup.value" required />
                     </label>
 
-                    <label>Server Command:
-                        <input type="text" name="server" data-bind="textInput: activeTemplates().server.value" required />
-                    </label>
+                    <div id="server-template" data-bind="visible: serverCheckbox() === true">
+                        <label>Server Command:
+                            <input type="text" name="server" data-bind="textInput: activeTemplates().server.value" required />
+                        </label>
+                    </div>
+
+                    <div id="alarm-template" data-bind="visible: alarmCheckbox() === true">
+                        <label>Alarm Command:
+                            <input type="text" name="alarm" data-bind="textInput: activeTemplates().alarm.value" />
+                        </label>
+                    </div>
 
                     <label>Worker Command:
                         <input type="text" name="worker" data-bind="textInput: activeTemplates().worker.value" required />
                     </label>
 
-                    <label>Auth Template:
-                        <p class="helptext">Use variable names from the Account Columns field.</p>
-                        <input type="text" name="auth" data-bind="textInput: activeTemplates().auth.value" required />
-                    </label>
-
-                    <label>Delay Template:
+                    <label>Delay Command:
                         <input type="text" name="delay" data-bind="textInput: activeTemplates().delay.value" required />
                     </label>
                 </fieldset>
 
                 <fieldset class="fieldset small-12 columns">
-                    <legend>Output:</legend>
-
+                    <legend>File Output</legend>
                     <label>Filename:
                         <input type="text" name="outputFileName" data-bind="textInput: activeTemplates().filename.value" required />
                     </label>
@@ -139,9 +161,7 @@
 
                 <h5>Preview</h5>
                 <div class="fieldset small-12 columns">
-                    <div>
-                        <div id="script-preview" data-bind="html: generateScriptPreview"></div>
-                    </div>
+                    <div id="script-preview" data-bind="html: generateScriptPreview"></div>
                 </div>
             </div>
             <div class="row text-center">
@@ -169,6 +189,7 @@
         $("#cph-count").html(cph);
         $("#wph-count").html(wph);
         $("#tw-count").html(tw);
+        $("#workers").val(wph).change();
     });
 </script>
 </body>

@@ -1,16 +1,16 @@
 {
   "name": "pgm-multiloc",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "A tool to visualize coverage of multiple instances of RocketMap",
   "keywords": [
     "rocketmap"
   ],
-  "homepage": "https://github.com/beccasafan/pgm-multiloc",
-  "bugs": "https://github.com/beccasafan/pgm-multiloc/issues",
+  "homepage": "https://github.com/voxx/pgm-multiloc",
+  "bugs": "https://github.com/voxx/pgm-multiloc/issues",
   "license": "MIT",
   "author": "beccasafan",
   "main": "gulpfile.js",
-  "repository": "https://github.com/beccasafan/pgm-multiloc",
+  "repository": "https://github.com/voxx/pgm-multiloc",
   "scripts": {
     "postinstall": "npm run typings install && npm run build",
     "build": "gulp default",
