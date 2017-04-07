@@ -19,7 +19,22 @@ export class ViewModel {
     public filename: KnockoutObservable<string>;
 
     public serverCheckbox: KnockoutObservable<boolean>;
+    public serverNoPokemon: KnockoutObservable<boolean>;
+    public serverNoGyms: KnockoutObservable<boolean>;
+    public serverNoPokestops: KnockoutObservable<boolean>;
+    public serverNoSearchControl: KnockoutObservable<boolean>;
+    public serverFixedLocation: KnockoutObservable<boolean>;
+    public serverOptions: KnockoutComputed<string>;
+
     public alarmCheckbox: KnockoutObservable<boolean>;
+    public alarmConfig: KnockoutObservable<boolean>;
+    public alarmHost: KnockoutObservable<boolean>;
+    public alarmPort: KnockoutObservable<boolean>;
+    public alarmConfigValue: KnockoutObservable<string>;
+    public alarmHostValue: KnockoutObservable<string>;
+    public alarmPortValue: KnockoutObservable<number>;
+    public alarmOptions: KnockoutComputed<string>;
+
     public scriptDelay: KnockoutObservable<number>;
 
     private windowsTemplates: Templates;
@@ -52,7 +67,22 @@ export class ViewModel {
         });
 
         this.serverCheckbox = ko.observable($('#serverCheckbox').is(':checked'));
+        this.serverNoPokemon = ko.observable($('#no-pokemon').is(':checked'));
+        this.serverNoGyms = ko.observable($('#no-gyms').is(':checked'));
+        this.serverNoPokestops = ko.observable($('#no-pokestops').is(':checked'));
+        this.serverNoSearchControl = ko.observable($('#no-search-control').is(':checked'));
+        this.serverFixedLocation = ko.observable($('#fixed-location').is(':checked'));
+        this.serverOptions = ko.computed(() => this.getServerOptions().toString());
+
         this.alarmCheckbox = ko.observable($('#alarmCheckbox').is(':checked'));
+        this.alarmConfig = ko.observable($('#alarm-config').is(':checked'));
+        this.alarmHost = ko.observable($('#alarm-host').is(':checked'));
+        this.alarmPort = ko.observable($('#alarm-port').is(':checked'));
+        this.alarmConfigValue = ko.observable('custom-alarms.json');
+        this.alarmHostValue = ko.observable('127.0.0.1');
+        this.alarmPortValue = ko.observable(4000);
+        this.alarmOptions = ko.computed(() => this.getAlarmOptions().toString());
+
         this.scriptDelay = ko.observable(config.scriptDelay);
 
         this.accountsPerHive = ko.observable(0);
@@ -105,19 +135,52 @@ export class ViewModel {
         return this.os() === 'windows' ? this.windowsTemplates : this.linuxTemplates;
     }
 
+    private getServerOptions(): String {
+        let serverOptions = '';
+        if (this.serverCheckbox) {
+            let np = this.serverNoPokemon() ? '-np ' : '';
+            let ng = this.serverNoGyms() ? '-ng ' : '';
+            let nk = this.serverNoPokestops() ? '-nk ' : '';
+            let nsc = this.serverNoSearchControl() ? '-nsc ' : '';
+            let fl = this.serverFixedLocation() ? '-fl' : '';
+            serverOptions = np + ng + nk + nsc + fl;
+        } else {
+            serverOptions = '';
+        }
+        return serverOptions
+    }
+
+    private getAlarmOptions(): String {
+        let alarmOptions = '';
+        if (this.alarmCheckbox) {
+            let ac = (this.alarmConfig() && this.alarmConfigValue()) ? '-a ' + this.alarmConfigValue().toString() : '';
+            let ah = (this.alarmHost() && this.alarmHostValue()) ? ' -H ' + this.alarmHostValue().toString() : '';
+            let ap = (this.alarmPort() && this.alarmPortValue()) ? ' -P ' + this.alarmPortValue().toString() : '';
+            alarmOptions = ac + ah + ap;
+        } else {
+            alarmOptions = '';
+        }
+        return alarmOptions
+    }
+
     public generateScriptOutput(isPreview: boolean = true): string {
         let templates = this.activeTemplates();
         let hives = this.activeHives();
         if (hives.length <= 0) { return ''; }
+        let sOptions = this.serverOptions();
+        let aOptions = this.alarmOptions();
 
         let setupScript = `${templates.setup.value()}
 `;
         let serverScript = this.serverCheckbox() === false ? '' : `${this.replaceVariables(templates.server.value(), {
             'rocketmap-directory': this.rocketmapDirectory(),
-            location: hives[0].getCenter().toString()
+            location: hives[0].getCenter().toString(),
+            'server-options': sOptions
         })}
 `;
-        let alarmScript = this.alarmCheckbox() === false ? '' : `${templates.alarm.value()}
+        let alarmScript = this.alarmCheckbox() === false ? '' : `${this.replaceVariables(templates.alarm.value(), {
+            'alarm-options': aOptions
+        })}
 `;
 
         let workerScript = '';
