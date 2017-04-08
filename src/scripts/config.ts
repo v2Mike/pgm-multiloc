@@ -16,7 +16,7 @@ export class config {
     setup: 'taskkill /IM python.exe /F',
     alarm: 'Start "Alarm" /d {rocketmap-directory} /MIN python.exe Tools/PokeAlarm/start_pokealarm.py {alarm-options}',
     server: 'Start "Server" /d {rocketmap-directory} /MIN python.exe runserver.py -os -l "{location}" {server-options}',
-    worker: 'Start "Worker{index}" /d {rocketmap-directory} /MIN python.exe runserver.py -ns -ac {account-directory}hive{index}.csv -l "{location}" --disable-clean -st {steps} -w {workers}',
+    worker: 'Start "Worker{index}" /d {rocketmap-directory} /MIN python.exe runserver.py -ns -ac {account-directory}hive{index}.csv -l "{location}" {worker-options} -st {steps} -w {workers}',
     delay: 'ping 127.0.0.1 -n {script-delay} > null',
     filename: 'start-scan.bat'
   };
@@ -25,7 +25,7 @@ export class config {
     setup: '#!/usr/bin/env bash',
     alarm: 'screen -d -m -S ALARM python Tools/PokeAlarm/start_pokealarm.py {alarm-options}',
     server: 'screen -d -m -S MAP python runserver.py -os -l \'{location}\' {server-options}',
-    worker: 'screen -d -m -S HIVE{index} python runserver.py -ns -sn HIVE{index} -ac {account-directory}hive{index}.csv -l \'{location}\' --disable-clean -st {steps} -w {workers}',
+    worker: 'screen -d -m -S HIVE{index} python runserver.py -ns -ac {account-directory}hive{index}.csv -l \'{location}\' {worker-options} -st {steps} -w {workers}',
     delay: 'sleep {script-delay}',
     filename: 'start-scan.sh'
   };

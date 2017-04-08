@@ -16,6 +16,7 @@ export class ViewModel {
     public accountsPerHive: KnockoutObservable<number>;
     public accountDirectory: KnockoutObservable<string>;
     public rocketmapDirectory: KnockoutObservable<string>;
+    public scriptDelay: KnockoutObservable<number>;
     public filename: KnockoutObservable<string>;
 
     public serverCheckbox: KnockoutObservable<boolean>;
@@ -35,7 +36,15 @@ export class ViewModel {
     public alarmPortValue: KnockoutObservable<number>;
     public alarmOptions: KnockoutComputed<string>;
 
-    public scriptDelay: KnockoutObservable<number>;
+    public webhookCheckbox: KnockoutObservable<boolean>;
+    public snCheckbox: KnockoutObservable<boolean>;
+    public webhookValue: KnockoutObservable<string>;
+    public snValue: KnockoutObservable<string>;
+    public disableClean: KnockoutObservable<boolean>;
+    public workerNoPokemon: KnockoutObservable<boolean>;
+    public workerNoGyms: KnockoutObservable<boolean>;
+    public workerNoPokestops: KnockoutObservable<boolean>;
+    public workerOptions: KnockoutComputed<string>;
 
     private windowsTemplates: Templates;
     private linuxTemplates: Templates;
@@ -83,10 +92,20 @@ export class ViewModel {
         this.alarmPortValue = ko.observable(4000);
         this.alarmOptions = ko.computed(() => this.getAlarmOptions().toString());
 
-        this.scriptDelay = ko.observable(config.scriptDelay);
-
         this.accountsPerHive = ko.observable(0);
         this.accountDirectory = ko.observable(config.accountDirectory);
+        this.scriptDelay = ko.observable(config.scriptDelay);
+
+        this.webhookCheckbox = ko.observable($('#webhook-checkbox').is(':checked'));
+        this.snCheckbox = ko.observable($('#sn-checkbox').is(':checked'));
+        this.disableClean = ko.observable($('#disable-clean').is(':checked'));
+        this.webhookValue = ko.observable('http://127.0.0.1:4000');
+        this.snValue = ko.observable('HIVE{index}');
+        this.workerNoPokemon = ko.observable($('#worker-no-pokemon').is(':checked'));
+        this.workerNoGyms = ko.observable($('#worker-no-gyms').is(':checked'));
+        this.workerNoPokestops = ko.observable($('#worker-no-pokestops').is(':checked'));
+
+        this.workerOptions = ko.computed(() => this.getWorkerOptions().toString());
 
         this.windowsTemplates = new Templates(config.windowsTemplates);
         this.linuxTemplates = new Templates(config.linuxTemplates);
@@ -163,12 +182,26 @@ export class ViewModel {
         return alarmOptions
     }
 
+    private getWorkerOptions(): String {
+        let workerOptions = '';
+            let sn = (this.snCheckbox() && this.snValue()) ? '-sn ' + this.snValue().toString() : '';
+            let wh = (this.webhookCheckbox() && this.webhookValue()) ? '-wh "' + this.webhookValue().toString() + '"': '';
+            let dc = this.disableClean() ? ' --disable-clean ' : '';
+            let wnp = this.workerNoPokemon() ? ' -np ' : '';
+            let wng = this.workerNoGyms() ? ' -ng ' : '';
+            let wnk = this.workerNoPokestops() ? ' -nk ' : '';
+            workerOptions = sn + dc + wh + wnp + wng + wnk;
+
+        return workerOptions
+    }
+
     public generateScriptOutput(isPreview: boolean = true): string {
         let templates = this.activeTemplates();
         let hives = this.activeHives();
         if (hives.length <= 0) { return ''; }
         let sOptions = this.serverOptions();
         let aOptions = this.alarmOptions();
+        let wOptions = this.workerOptions();
 
         let setupScript = `${templates.setup.value()}
 `;
@@ -185,18 +218,23 @@ export class ViewModel {
 
         let workerScript = '';
         for (let i = 0; i < (isPreview ? 1 : hives.length); i++) {
+            let sd = i < (hives.length - 1) ? this.scriptDelay() : 0;
             workerScript += `${this.replaceVariables(templates.worker.value(), {
                 'rocketmap-directory': this.rocketmapDirectory(),
                 'account-directory': this.accountDirectory(),
-                index: i + 1,
                 location: hives[i].getCenter().toString(),
                 steps: hives[i].steps,
-                workers: this.accountsPerHive()
+                workers: this.accountsPerHive(),
+                'worker-options': wOptions,
+                index: i + 1
             })}
-${this.replaceVariables(templates.delay.value(), {
-    'script-delay': this.scriptDelay()
-})}
 `;
+          if (sd > 0) {
+              workerScript += `${this.replaceVariables(templates.delay.value(), {
+                  'script-delay': sd
+              })}
+`;
+          }
         }
 
         return setupScript + serverScript + alarmScript + workerScript;

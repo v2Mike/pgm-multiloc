@@ -152,15 +152,10 @@
                 </fieldset>
 
                 <fieldset class="fieldset small-12 columns">
-                    <legend>Workers Template</legend>
+                    <legend>Worker Template</legend>
                     <label>Workers Per Hive:
-                        <p class="helptext">The number of workers per hive. (This should be less than the total accounts per csv.)</p>
+                        <p class="helptext">[ -w ] The number of workers per hive. (This should be less than the total accounts per csv.)</p>
                         <input id="workers" type="text" name="workers" data-bind="textInput: accountsPerHive" required pattern="number" />
-                    </label>
-
-                    <label>Script Delay:
-                        <p class="helptext">The number of seconds to sleep between starting each hive to stagger logins.</p>
-                        <input id="scriptDelay" type="text" name="scriptDelay" data-bind="textInput: scriptDelay" required />
                     </label>
 
                     <label>Account CSV Directory:
@@ -174,10 +169,52 @@
                             <input id="rocketmap-directory" type="text" name="rocketmapDirectory" data-bind="textInput: rocketmapDirectory" required />
                         </label>
                     </div>
+
+                    <div id="worker-options" class="panel callout radius">
+                        <table>
+                            <tr class="row">
+                                <td class="small-2 large-2 columns">
+                                    <input type="checkbox" name="sn-checkbox" id="sn-checkbox" checked="checked" data-bind="checked: snCheckbox" />
+                                    <label id="sn-label" for="sn-checkbox">-sn</label>
+                                    <div data-bind="visible: snCheckbox() === true">
+                                        <input id="sn-value" type="text" name="sn-value" data-bind="textInput: snValue" />
+                                    </div>
+                                </td>
+                                <td class="small-2 large-2 columns">
+                                    <input type="checkbox" name="disable-clean" id="disable-clean" checked="checked" data-bind="checked: disableClean"/>
+                                    <label id="disable-clean-label" for="disable-clean">--disable-clean</label>
+                                </td>
+                                <td class="small-2 large-2 columns">
+                                    <input type="checkbox" name="webhook-checkbox" id="webhook-checkbox" data-bind="checked: webhookCheckbox" />
+                                    <label id="webhook-checkbox-label" for="webhook-host">-wh</label>
+                                    <div data-bind="visible: webhookCheckbox() === true">
+                                        <input id="webhook-value" type="text" name="webhook-value" data-bind="textInput: webhookValue" />
+                                    </div>
+                                </td>
+                                <td class="small-2 large-2 columns">
+                                    <input type="checkbox" name="worker-no-pokemon" id="worker-no-pokemon" data-bind="checked: workerNoPokemon"/>
+                                    <label id="worker-no-pokemon-label" for="worker-no-pokemon">-np</label>
+                                </td>
+                                <td class="small-2 large-2 columns">
+                                    <input type="checkbox" name="worker-no-gyms" id="worker-no-gyms" data-bind="checked: workerNoGyms"/>
+                                    <label id="worker-no-gyms-label" for="worker-no-gyms">-ng</label>
+                                </td>
+                                <td class="small-2 large-2 columns">
+                                    <input type="checkbox" name="worker-no-pokestops" id="worker-no-pokestops" data-bind="checked: workerNoPokestops"/>
+                                    <label id="worker-no-pokestops-label" for="worker-no-pokestops">-nk</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <label>Script Delay:
+                        <p class="helptext">The number of seconds to sleep between starting each hive to stagger logins.</p>
+                        <input id="scriptDelay" type="text" name="scriptDelay" data-bind="textInput: scriptDelay" required />
+                    </label>
                 </fieldset>
 
                 <fieldset class="fieldset small-12 columns">
-                    <p class="helptext">Valid parameters: <span data-bind="if: os() === 'windows'">{rocketmap-directory},</span> {server-options}, {alarm-options}, {account-directory}, {index}, {location}, {steps}, {workers}, {script-delay}</p>
+                    <p class="helptext">Valid parameters: <span data-bind="if: os() === 'windows'">{rocketmap-directory},</span> {server-options}, {alarm-options}, {worker-options}, {account-directory}, {index}, {location}, {steps}, {workers}, {script-delay}</p>
                     <legend>Generated Templates</legend>
 
                     <label>Setup Command:
