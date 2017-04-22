@@ -91,7 +91,7 @@
                         <table>
                             <tr>
                                 <td>
-                                    <input type="checkbox" name="no-pokemon" id="no-pokemon" data-bind="checked: serverNoPokemon" checked="checked" />
+                                    <input type="checkbox" name="no-pokemon" id="no-pokemon" data-bind="checked: serverNoPokemon" />
                                     <label id="no-pokemon-label" for="no-pokemon">-np</label>
                                 </td>
                                 <td>
@@ -103,12 +103,12 @@
                                     <label id="no-pokestops-label" for="no-pokestops">-nk</label>
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="no-search-control" id="no-search-control" data-bind="checked: serverNoSearchControl" />
-                                    <label id="no-search-control-label" for="no-search-control">-nsc</label>
+                                    <input type="checkbox" name="search-control" id="search-control" data-bind="checked: serverSearchControl" />
+                                    <label id="search-control-label" for="search-control">-sc</label>
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="fixed-location" id="fixed-location" data-bind="checked: serverFixedLocation" />
-                                    <label id="fixed-location-label" for="fixed-location">-fl</label>
+                                    <input type="checkbox" name="no-fixed-location" id="no-fixed-location" data-bind="checked: serverNoFixedLocation" />
+                                    <label id="no-fixed-location-label" for="no-fixed-location">-nfl</label>
                                 </td>
                             </tr>
                         </table>

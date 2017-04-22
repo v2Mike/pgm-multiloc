@@ -23,8 +23,8 @@ export class ViewModel {
     public serverNoPokemon: KnockoutObservable<boolean>;
     public serverNoGyms: KnockoutObservable<boolean>;
     public serverNoPokestops: KnockoutObservable<boolean>;
-    public serverNoSearchControl: KnockoutObservable<boolean>;
-    public serverFixedLocation: KnockoutObservable<boolean>;
+    public serverSearchControl: KnockoutObservable<boolean>;
+    public serverNoFixedLocation: KnockoutObservable<boolean>;
     public serverOptions: KnockoutComputed<string>;
 
     public alarmCheckbox: KnockoutObservable<boolean>;
@@ -79,8 +79,8 @@ export class ViewModel {
         this.serverNoPokemon = ko.observable($('#no-pokemon').is(':checked'));
         this.serverNoGyms = ko.observable($('#no-gyms').is(':checked'));
         this.serverNoPokestops = ko.observable($('#no-pokestops').is(':checked'));
-        this.serverNoSearchControl = ko.observable($('#no-search-control').is(':checked'));
-        this.serverFixedLocation = ko.observable($('#fixed-location').is(':checked'));
+        this.serverSearchControl = ko.observable($('#search-control').is(':checked'));
+        this.serverNoFixedLocation = ko.observable($('#no-fixed-location').is(':checked'));
         this.serverOptions = ko.computed(() => this.getServerOptions().toString());
 
         this.alarmCheckbox = ko.observable($('#alarmCheckbox').is(':checked'));
@@ -104,7 +104,6 @@ export class ViewModel {
         this.workerNoPokemon = ko.observable($('#worker-no-pokemon').is(':checked'));
         this.workerNoGyms = ko.observable($('#worker-no-gyms').is(':checked'));
         this.workerNoPokestops = ko.observable($('#worker-no-pokestops').is(':checked'));
-
         this.workerOptions = ko.computed(() => this.getWorkerOptions().toString());
 
         this.windowsTemplates = new Templates(config.windowsTemplates);
@@ -160,9 +159,9 @@ export class ViewModel {
             let np = this.serverNoPokemon() ? '-np ' : '';
             let ng = this.serverNoGyms() ? '-ng ' : '';
             let nk = this.serverNoPokestops() ? '-nk ' : '';
-            let nsc = this.serverNoSearchControl() ? '-nsc ' : '';
-            let fl = this.serverFixedLocation() ? '-fl' : '';
-            serverOptions = np + ng + nk + nsc + fl;
+            let sc = this.serverSearchControl() ? '-sc ' : '';
+            let nfl = this.serverNoFixedLocation() ? '-nfl' : '';
+            serverOptions = np + ng + nk + sc + nfl;
         } else {
             serverOptions = '';
         }
